@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Server Actions
 
-## Getting Started
+## What is a Server Action?
 
-First, run the development server:
+A Server Action is a function that runs on the server and can be called from a React/Next.js component.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It is mainly used for server-side operations such as:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Form submissions
+- Creating data
+- Updating data
+- Deleting data
+- Database operations
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Basic Example
 
-## Learn More
+```jsx
+async function submitAction(formData) {
+  "use server";
 
-To learn more about Next.js, take a look at the following resources:
+  const name = formData.get("name");
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  console.log(name);
+}
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+export default function Form() {
+  return (
+    <form action={submitAction}>
+      <input name="name" type="text" />
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
 
-## Deploy on Vercel
+## how it works
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+User submits form
+       ↓
+<form action={submitAction}>
+       ↓
+Server Action
+       ↓
+Server-side logic
+       ↓
+Database / API / other operation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## why server action use 
+
+Form
+ ↓
+Server Action
+ ↓
+Database
+
+## instead of
+
+Form
+ ↓
+fetch("/api/users")
+ ↓
+API Route
+ ↓
+Database
